@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<html>
+	<head>
+		<title>Techweaver Home and Business Computer Repair and IT Contract Services for Dayonta Beach, Palm Coast and Volusia County, Fl</title>
+		<link rel="stylesheet" title="Standard" href="http://localhost/resources/css/screen2.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="http://localhost/resources/css/bubbles.css" type="text/css" media="screen" charset="utf-8" />
+		<link rel="stylesheet" href="http://localhost/resources/css/menu.css" type="text/css" media="screen" charset="utf-8" />
+		<link type="text/css" rel="stylesheet" href="http://localhost/resources/css/lightbox.css" media="screen" />
+		<link type="text/css" rel="stylesheet" href="http://localhost/resources/css/autosuggest_inquisitor.css" media="screen" />
+
+		<script type="text/javascript" src="http://localhost/resources/javascript/wow.js"></script>
+		<script type="text/JavaScript" src="http://localhost/resources/javascript/rounded_corners.inc.js"></script>
+		<script type="text/JavaScript" src="http://localhost/resources/javascript/bsn.AutoSuggest_c_2.0.js"></script>
+		<script type="text/JavaScript" src="http://localhost/resources/javascript/Application.js"></script>
+	</head>
+	<body>
+		<div id="header">
+
+			<h1>Client's Name</h1>
+			<ul id="nav">
+				<li><a href="kardex.php" class="flyoutMenu" menu="kardexMenu">Kardex</a></li>
+				<li><a href="mar.html">SMORGE</a></li>
+				<li><a href="#">Labs</a></li>
+				<li><a href="#">Studies</a></li>
+
+				<li><a href="#">Orders</a></li>
+				<li><a href="#">Assessments</a></li>
+				<li><a href="#">Notes</a></li>
+			</ul>
+		</div>
+		<div id="wrapper">
+			<div id="content">
+				<replace id="mainModule">
+				</replace>
+			</div>
+			<div id="footerControl"></div>
+		</div>
+		<div id="footer">
+			MTG Collection
+		</div>
+	</body>
+</html>

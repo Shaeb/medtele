@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<module name="MARModule">
+	<dependency type="Class">MAR</dependency>
+	<dependency type="Class">Connection</dependency>
+	<dependency type="Parameter">patientId</dependency>
+	<data type="Processor">MARProcessor</data>
+	<data type="Stream">MARModuleStream.php</data>
+	<stylesheet>MARModuleStyleSheet.xsl</stylesheet>
+</module>

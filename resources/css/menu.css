@@ -1,0 +1,15 @@
+ul#tabs { list-style-type: none; }
+
+#tabs li {
+	background-image: url('/resources/images/menu_item.png');
+	float: left;
+	width: 100px;
+}
+
+li.spacer {
+	background-image: url('/resources/images/menu_item.png');
+	background-attachment: fixed;
+	background-position: top left;
+	float: left;
+	width: 100px;
+}

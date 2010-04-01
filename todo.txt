@@ -1,0 +1,14 @@
+step 1: login page
+	- need a module for display
+	- need a module for processing
+		on success:
+			- determines user level
+			- establishes session
+			- redirects
+		on failure:
+			- shows error
+
+step 2: home page
+	- extended (hiding) menu module
+	- patient selection module	
+	- frequent activities module

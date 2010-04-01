@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page name="MARPage">
+	<dependency type="style">screen.css</dependency>
+	<template>template.xml</template>
+	<title>MAR</title>
+	<security gate="LoginPage">
+		<session>true</session>
+		<userAccess>
+			<group>Administrators</group>
+			<group>Nurses</group>
+			<user>nathanfl</user>
+		</userAccess>
+		<logging>false</logging>
+	</security>
+	<modules>
+		<module>HeaderModule</module>
+		<module>MARModule</module>
+		<module>FooterModule</module>
+	</modules>
+</page>

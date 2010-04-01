@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<module name="PatientListModule">
+	<data type="StaticFile">LoginModule.php</data>
+	<data type="Processor">LoginModule</data>
+</module>

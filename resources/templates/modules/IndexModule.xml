@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<module name="IndexModule">
+	<data type="StaticFile">IndexModule.php</data>
+</module>

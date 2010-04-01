@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<module name="LoginRegistrationModule">
+	<data type="DynamicFile">LoginRegistration.Module.php</data>
+	<data type="Processor">RegistrationModule</data>
+</module>

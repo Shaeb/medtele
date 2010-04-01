@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page name="PatientSelectPage">
+	<dependency type="style">screen.css</dependency>
+	<template>template.xml</template>
+	<title>Select a Patient</title>
+	<security gate="LoginPage">
+		<session>true</session>
+		<userAccess>
+			<group>Administrators</group>
+			<group>Nurses</group>
+			<user>nathanfl</user>
+		</userAccess>
+		<logging>false</logging>
+	</security>
+	<modules replace="mainModule">
+		<module>PatientListModule</module>
+	</modules>
+</page>

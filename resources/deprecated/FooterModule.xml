@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<module name="FooterModule">
+	<dependency type="Class">Header</dependency>
+	<data type="StaticFile">FooterModule.php</data>
+</module>

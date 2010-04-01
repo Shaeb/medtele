@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<module name="FlashModule">
+	<data type="DynamicFile">Flash.Module.php</data>
+</module>

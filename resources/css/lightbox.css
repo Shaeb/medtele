@@ -1,0 +1,91 @@
+/* LIGHTBOX {{{*/
+.lightbox {
+	display: none;
+	position: fixed;
+	top: 25%;
+	left: 50%;
+	margin: 0 0 0 -250px;
+	width: auto;
+	height: auto;
+	padding: 1em;
+	border: 1px solid #000000;
+	background-color: white;
+	text-align: left;
+	z-index: 9999;
+	overflow: auto;
+}
+#overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1001;
+	background-color: #333;
+	-moz-opacity: 0.8;
+	opacity: .80;
+	filter: alpha(opacity=80);
+}
+.lightbox {
+_position: absolute;
+}
+#overlay[id] {
+/* IE6 and below Can't See This */
+	position: fixed;
+}
+/* END LIGHTBOX }}}*/
+
+.reveal {
+	display: block;
+}
+
+.hide {
+	display: none;
+}
+
+/** sample stuff 
+h1 {
+	width: 100%;
+	margin: 1em;
+	padding: 0;
+	text-align: bottom;
+}
+
+body {
+	margin: 0; padding: 0; background: #FFFFFF;
+}
+
+**/
+.moveable { position: absolute; }
+
+.button {
+	background: url(images/button2.png) no-repeat;
+	min-height: 50px;
+	min-width: 100px;
+}
+
+input, textarea {
+	border: solid 1px #EFEFEF;
+	background-color: #FFF;
+	color: #000;
+}
+
+input:focus, textarea:focus, select:focus {
+	color: #FF0000;
+	background-color: #f7f897;
+	border: solid 1px #000;
+}
+
+.editing { border-size: 0px; }
+
+table {
+	width: auto;
+	height: auto;
+}
+.editable:hover {
+	background-color: #f7f897;
+	border: #CFCFCF dashed 1px;
+}
+.editable {
+	border: #CFCFCF dashed 1px;
+}

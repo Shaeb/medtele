@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applicationSettings>
+	<development>
+		<database>
+			<username>medtele</username>
+			<password>fliex123</password>
+			<hostname>localhost</hostname>
+			<databasename>medtele</databasename>
+		</database>
+	</development>
+	<testing>
+		<database>
+			<username>medtele</username>
+			<password>fliex123</password>
+			<hostname>localhost</hostname>
+			<databasename>medtele</databasename>
+		</database>
+	</testing>
+	<production>
+		<database>
+			<username>medtele</username>
+			<password>fliex123</password>
+			<hostname>localhost</hostname>
+			<databasename>medtele</databasename>
+		</database>
+	</production>
+</applicationSettings>

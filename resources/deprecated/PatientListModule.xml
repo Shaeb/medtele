@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<module name="PatientListModule">
+	<dependency type="Class">Census</dependency>
+	<dependency type="Class">Patient</dependency>
+	<dependency type="Style">style2.css</dependency>
+	<data type="Processor">PatientListProcessor</data>
+	<data type="Stream">PatientListModuleStream.php</data>
+	<stylesheet>PatientListModuleStyleSheet.xsl</stylesheet>
+</module>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page name="LoginPage">
+	<dependency type="style">screen.css</dependency>
+	<template>MedTeleNursing.Template.xml</template>
+	<title>Select a Patient</title>
+	<security>
+		<session>true</session>
+		<userAccess>
+			<group>Administrators</group>
+			<group>Nurses</group>
+			<user>nathanfl</user>
+		</userAccess>
+		<logging>false</logging>
+	</security>
+	<modules>
+		<module>HeaderModule</module>
+		<module>LoginModule</module>
+		<module>FooterModule</module>
+	</modules>
+</page>

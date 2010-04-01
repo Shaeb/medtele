@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<module name="UserProfileModule">
+	<data type="DynamicFile">UserProfile.Module.php</data>
+	<data type="Processor">UserProfileModule</data>
+</module>

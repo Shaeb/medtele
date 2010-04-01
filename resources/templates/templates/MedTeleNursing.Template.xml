@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>MedTeleNursing.com - The Nurses of MSU and TMU @ Health Central</title>
+		<link rel="stylesheet" title="Standard" href="http://localhost/medtele/resources/css/techweaver_screen.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="http://localhost/medtele/resources/css/bubbles.css" type="text/css" media="screen" charset="utf-8" />
+		<link rel="stylesheet" href="http://localhost/medtele/resources/css/menu.css" type="text/css" media="screen" charset="utf-8" />
+		<link type="text/css" rel="stylesheet" href="http://localhost/medtele/resources/css/lightbox.css" media="screen" />
+		<link type="text/css" rel="stylesheet" href="http://localhost/medtele/resources/css/autosuggest_inquisitor.css" media="screen" />
+  		<link rel="stylesheet" href="http://localhost/medtele/resources/css/slide.css" type="text/css" media="screen" />
+		
+		<!-- 
+		<script type="text/javascript" src="http://localhost/medtele/resources/javascript/wow.js"></script>
+		<script type="text/JavaScript" src="http://localhost/medtele/resources/javascript/Application.js"></script>
+		-->
+		<script type="text/JavaScript" src="http://localhost/medtele/resources/javascript/rounded_corners.inc.js"></script>
+		<script type="text/JavaScript" src="http://localhost/medtele/resources/javascript/bsn.AutoSuggest_c_2.0.js"></script>
+		
+		<!-- PNG FIX for IE6 -->
+	  	<!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+		<!--[if lte IE 6]>
+			<script type="text/javascript" src="http://localhost/medtele/resources/javascript/pngfix/supersleight-min.js"></script>
+		<![endif]-->
+		 
+	    <!-- jQuery - the core -->
+		<script src="http://localhost/medtele/resources/javascript/jquery-1.4.2.js" type="text/javascript"></script>
+		<!-- Sliding effect -->
+		<script src="http://localhost/medtele/resources/javascript/slide.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<div id="topsection">
+
+	<div id="logo">
+		<a href="index.htm"><img src="resources/images/weblogo.png" alt="Techweaver Computer Services" /></a>
+
+	</div>
+
+	<div id="navbar">
+		<div class="tabs">
+			<ul>
+			<li><a href="/view/IndexPage">Home</a></li>
+			<li><a href="./personal.htm">Personal</a></li>
+			<li><a href="./business.htm">Business</a></li>
+
+			<li><a href="./information.php">Contact Us</a></li>
+			<li><a href="./download.htm">Downloads</a></li>
+			<li><a href="./weavernet.htm">WeaverNET</a></li>
+			</ul>
+		</div>
+	</div>
+
+</div>
+
+
+<div id="maincontainer">
+
+<div id="leftcolumn">
+<replace id="leftModule">
+</replace>
+</div>
+
+	<div id="centercolumn">
+<replace id="mainModule">
+</replace>
+				<div class="shiftcontainer">					
+				</div>
+
+	</div>
+
+</div>
+
+
+
+<div id="bottomcontainer">
+
+	<div id="footer">
+		<div id="footerinfo"><div id="footertext">Techweaver Computer Services - Daytona Beach, Fl 32114 - helpdesk@techweaver.net - 386.236.9792</div></div>
+	</div>
+
+</div>
+<!-- Panel -->
+<replace id="loginRegistrationPanel"></replace> 
+<!--panel -->
+</body>
+</html>

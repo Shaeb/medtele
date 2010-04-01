@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page name="RegistrationPage">
+	<dependency type="style">screen.css</dependency>
+	<template>MedTeleNursing.Template.xml</template>
+	<title>Registration</title>
+	<security gate="LoginPage">
+		<session>true</session>
+		<userAccess>
+			<group>Administrators</group>
+			<group>Nurses</group>
+			<user>nathanfl</user>
+		</userAccess>
+		<logging>false</logging>
+	</security>
+	<modules replace="mainModule">
+		<module>RegistrationModule</module>
+	</modules>
+	<modules replace="leftModule">
+		
+	</modules>
+</page>
