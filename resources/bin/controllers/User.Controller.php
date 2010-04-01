@@ -4,7 +4,7 @@
 // version 1.0 - created 04/13/2009
 
 require_once( '../constants.php' );
-add_required_class( 'Connection.Class.php', MODEL );
+//add_required_class( 'Connection.Class.php', MODEL );
 add_required_class( 'User.Class.php', MODEL );
 add_required_class( 'Application.Controller.php', CONTROLLER );
 // already a part of the app, here for doc ...
@@ -42,7 +42,7 @@ class UserController {
 		return self::$instance;
 	}
 	
-	public function registration( Connection $connection ) {
+	public function registration( DatabaseConnection $connection ) {
 		if( null == $connection || null == $this->user ) {
 			echo "connection null";
 			return;
@@ -52,7 +52,7 @@ class UserController {
 		if ( 1 == $logged_in ) {
 			$this->session = SessionController::getInstance();
 			$this->session->setMessage( "Beinvenido {$this->user->username}");
-			$this->session->start( $this->user );
+			$this->session->setupAuthorizedSession( $this->user );
 		} else {
 			
 		echo "will not log in: {$logged_in}";
@@ -60,7 +60,7 @@ class UserController {
 		}
 	}
 	
-	public function login( Connection $connection ) {
+	public function login( DatabaseConnection $connection ) {
 		if( null == $connection || null == $this->user ) {
 			echo "something null";
 			return;
@@ -68,7 +68,7 @@ class UserController {
 		if ( $this->user->login( $connection ) ) {
 			$this->session = SessionController::getInstance();
 			$this->session->setMessage( "Welcome back {$this->user->username}");
-			$this->session->start( $this->user );
+			$this->session->setupAuthorizedSession( $this->user );
 		} else {
 			echo "not logged in";
 			print_r( $this->user);
@@ -76,7 +76,9 @@ class UserController {
 	}
 }
 
-$application = ApplicationController::getInstance();
+if(!isset($application)){
+	$application = ApplicationController::getInstance();
+}
 
 $userProcessor = UserController::getInstance();
 
@@ -84,10 +86,10 @@ $message = $_REQUEST[ 'message'];
 
 switch( $message ) {
 	case 'registration':
-		$userProcessor->registration( $application->connection );
+		$userProcessor->registration( $application->getDatabaseConnection() );
 		break;
 	case 'login':
-		$userProcessor->login(  $application->connection );
+		$userProcessor->login(  $application->getDatabaseConnection() );
 		break;
 	default:
 		break;

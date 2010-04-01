@@ -8,8 +8,11 @@ abstract class Document extends DOMDocument {
 	}
 
 	protected function log( $data ) {
+		return; // just temporary because i dont wont to work with output buffering ATM
 		if( DEBUGGING ) {
+			ob_start();
 			echo "$data\n";
+			ob_flush();
 		}
 	}
 

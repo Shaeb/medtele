@@ -1,5 +1,5 @@
 <?
-add_required_class( 'Connection.Class.php', MODEL );
+add_required_class( 'Application.Controller.php', CONTROLLER );
 class User {
 	var $username = '';
 	var $password = '';
@@ -13,7 +13,7 @@ class User {
 		$this->isAuthenticated = false;
 	}
 
-	public function login( Connection $connection ) {
+	public function login( DatabaseConnection $connection ) {
 		$this->isAuthenticated = false;
 
 		if( $connection == null ) {
@@ -54,10 +54,10 @@ class User {
 		return $this->isAuthenticated;
 	}
 
-	public function logout( Connection $connection ) {
+	public function logout( DatabaseConnection $connection ) {
 	}
 
-	public function register( Connection $connection ) {
+	public function register( DatabaseConnection $connection ) {
 		// updated time logged in
 		$lastLogin = date( 'Y-m-d H:i:s' );
 		$ipAddress = $_SERVER['REMOTE_ADDR'];
@@ -77,7 +77,7 @@ class User {
 		return $this->login( $connection );
 	}
 	
-	public function restoreUserFromUsername( Connection $connection ) {
+	public function restoreUserFromUsername( DatabaseConnection $connection ) {
 		if(!isset($connection) || !isset($this->username)) {
 			$this->isAuthenticated = false;
 			return$this->isAuthenticated;
@@ -107,10 +107,10 @@ class User {
 		$this->isAuthenticated = $user->isLoggedIn;
 	} 
 
-	function update( Connection $connection ) {
+	function update( DatabaseConnection $connection ) {
 	}
 
-	function delete( Connection $connection ) {
+	function delete( DatabaseConnection $connection ) {
 	}
 
 	function serialize() {

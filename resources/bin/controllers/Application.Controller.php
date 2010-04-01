@@ -1,5 +1,5 @@
 <?php
-add_required_class( 'Connection.Class.php', MODEL );
+//add_required_class( 'Connection.Class.php', MODEL );
 add_required_class( 'User.Class.php', MODEL );
 add_required_class( 'Document.Class.php', MODEL );
 // tools already a part of the app
@@ -10,11 +10,13 @@ class ApplicationController {
 	private $user;
 	private  $connection;
 	public  $session;
+	private $appSettings;
 	private static  $instance;
 	
 	private function __construct(){
-		$this->connection = Connection::getInstance();
+		$this->connection = DatabaseConnection::getInstance();
 		$this->session = SessionController::getInstance();
+		$this->appSettings = new ApplicationSettings(APPLICATION_SETTINGS_FILE, ENVIRONMENT);
 		$username = '';
 		if( isset($_SESSION['username'])){
 			$username = $_SESSION['username'];
@@ -37,16 +39,33 @@ class ApplicationController {
 	}
 	
 	public function getDatabaseConnection(){
-		
+		$settings = $this->appSettings->getSettingsFor("database");
+		if(isset($settings)){
+			if(array_key_exists("username",$settings)){
+				$this->connection->setUsername($settings["username"]);
+			}
+			if(array_key_exists("password",$settings)){
+				$this->connection->setPassword( $settings["password"]);
+			}
+			if(array_key_exists("hostname",$settings)){
+				$this->connection->setHost( $settings["hostname"]);
+			}
+			if(array_key_exists("databasename",$settings)){
+				$this->connection->setDatabase( $settings["databasename"]);
+			}
+		}
+		return $this->connection;
 	}
 }
 
 
 class SessionController {
 	private static $instance;
+	private $sessionHasBegun;
 	private $message;
 	
 	private function __contruct() {
+		$this->sessionHasBegun = false;
 	}
 	
 	public static function getInstance() {
@@ -62,7 +81,14 @@ class SessionController {
 		}
 	}
 	
-	public function start( User $user ) {
+	public function start(){
+		if(!$this->sessionHasBegun){
+			$this->sessionHasBegun = true;
+			session_start();
+		}
+	}
+	
+	public function setupAuthorizedSession( User $user ) {
 		//session_name( $user->username );
 		session_start();
 		if( isset( $this->message ) ) {
@@ -93,8 +119,13 @@ class ApplicationSettings extends Document {
 	private $tags;
 	private $settings;
 	public  $isLoaded;
+	//private static $instance; 
 
-	function __construct( $appSettingsFileName, $environment ) {
+	public function __construct($appSettingsFileName, $environment) {
+		$this->reload($appSettingsFileName, $environment);
+	}
+	
+	public function reload($appSettingsFileName, $environment){
 		if( isset( $appSettingsFileName ) && isset($environment) ) {
 			$this->appSettingsFileName = $appSettingsFileName;
 			$this->url = APPSETTINGS_PATH . $this->appSettingsFileName . PAGE_EXTENSION;
@@ -110,7 +141,6 @@ class ApplicationSettings extends Document {
 			}
 		}
 	}
-	
 	private function processSettings( $nodes ){
 		$map = array();
 		foreach( $nodes as $node ){
@@ -127,12 +157,22 @@ class ApplicationSettings extends Document {
 		return $this->settings;
 	}
 	public function getSettingsFor($target){
-		if(array_key_exists($this->settings[ENVIRONMENT], $target)){
+		if(array_key_exists($target,$this->settings[ENVIRONMENT])){
 			return $this->settings[ENVIRONMENT][$target];
 		} else {
 			return null;
 		}
 	}
+	
+	/**
+	public static function getInstance($appSettingsFileName, $environment) {
+		if( !isset( self::$instance ) ) {
+			self::$instance = new ApplicationSettings();
+			self::$instance->reload($appSettingsFileName, $environment);
+		}
+		return self::$instance;
+	}
+	**/
 }
 
 class DatabaseConnection{

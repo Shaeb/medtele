@@ -52,9 +52,11 @@ define( IMAGE_ROOT, 'http://' . $_SERVER[ 'HTTP_HOST' ] . '/medtele/resources/im
 
 define( DEBUGGING, 1 );
 define( ENVIRONMENT, "development");
+define(APPLICATION_SETTINGS_FILE, "MedTeleNursing.AppSettings");
 
 require_once( BIN_ROOT . 'helpers/tools.php');
 add_required_class( 'Document.Class.php', MODEL );
-add_required_class( 'Connection.Class.php', MODEL );
 add_required_class( 'Application.Controller.php', CONTROLLER );
+$application = ApplicationController::getInstance();
+$application->session->start();
 ?>
