@@ -7,6 +7,14 @@
 			<hostname>localhost</hostname>
 			<databasename>medtele</databasename>
 		</database>
+		<security>
+			<registration>
+				<defaultPage>RegistrationPage</defaultPage>
+			</registration>
+			<gatedPages>
+				<page>CalendarPage</page>
+			</gatedPages>
+		</security>
 	</development>
 	<testing>
 		<database>

@@ -11,6 +11,7 @@ class ApplicationController {
 	private  $connection;
 	public  $session;
 	private $appSettings;
+	public $registrationPage;
 	private static  $instance;
 	
 	private function __construct(){
@@ -55,6 +56,32 @@ class ApplicationController {
 			}
 		}
 		return $this->connection;
+	}
+	
+	public function isPageGated($pageName){
+		$isGated = false;
+		$settings = $this->appSettings->getSettingsFor("security");
+		if(isset($settings)){
+			if(array_key_exists("gatedPages",$settings)){
+				if(array_key_exists("page",$settings["gatedPages"])){
+					if($pageName == $settings["gatedPages"]["page"]){
+						$isGated = true;
+					}
+				}
+			}
+		} 
+		return $isGated;
+	}
+	
+	public function enforceGate(){
+		$settings = $this->appSettings->getSettingsFor("security");
+		if(isset($settings)){
+			if(array_key_exists("registration",$settings)){
+				if(array_key_exists("defaultPage",$settings["registration"])){
+					send_to( $settings["registration"]["defaultPage"] );
+				}
+			}
+		} 
 	}
 }
 
@@ -140,6 +167,8 @@ class ApplicationSettings extends Document {
 				$this->log( "url not found: $this->url." );
 			}
 		}
+		//print_r($this->settings);
+		//exit();
 	}
 	private function processSettings( $nodes ){
 		$map = array();
