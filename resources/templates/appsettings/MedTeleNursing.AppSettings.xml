@@ -26,10 +26,10 @@
 	</testing>
 	<production>
 		<database>
-			<username>medtele</username>
-			<password>fliex123</password>
+			<username>medtelen_web</username>
+			<password>medtelenursing</password>
 			<hostname>localhost</hostname>
-			<databasename>medtele</databasename>
+			<databasename>medtelen_medtele</databasename>
 		</database>
 	</production>
 </applicationSettings>
