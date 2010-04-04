@@ -63,11 +63,7 @@ class ApplicationController {
 		$settings = $this->appSettings->getSettingsFor("security");
 		if(isset($settings)){
 			if(array_key_exists("gatedPages",$settings)){
-				if(array_key_exists("page",$settings["gatedPages"])){
-					if($pageName == $settings["gatedPages"]["page"]){
-						$isGated = true;
-					}
-				}
+				$isGate = in_array($pageName,$settings["gatedPages"]);
 			}
 		} 
 		return $isGated;
@@ -145,6 +141,7 @@ class ApplicationSettings extends Document {
 	private $appSettingsFileName;
 	private $tags;
 	private $settings;
+	private $environmentRootNode;
 	public  $isLoaded;
 	//private static $instance; 
 
@@ -162,7 +159,10 @@ class ApplicationSettings extends Document {
 				$this->isLoaded = $this->load( $this->url, LIBXML_NOBLANKS );
 				$this->settings = array();
 				$nodes = $this->getElementsByTagName( $environment );
-				$this->settings = $this->processSettings( $nodes );
+				if(isset($nodes) && 1 <= $nodes->length){
+					$this->environmentRootNode = $nodes->item(0);
+					$this->settings = $this->processSettings( $nodes );
+				}
 			} else {
 				$this->log( "url not found: $this->url." );
 			}
@@ -174,7 +174,11 @@ class ApplicationSettings extends Document {
 		$map = array();
 		foreach( $nodes as $node ){
 			if($node->hasChildNodes() && ($node->firstChild instanceof DOMText)){
-				$map[$node->nodeName] = $node->nodeValue;
+				if(1 == $this->getNumberOfTagsByName($node->nodeName)) {
+					$map[$node->nodeName] = $node->nodeValue;
+				} else {
+					$map[] = $node->nodeValue;
+				}
 			} else {
 				$map[$node->nodeName] = $this->processSettings($node->childNodes)	;
 			}	
@@ -182,6 +186,16 @@ class ApplicationSettings extends Document {
 		return $map;
 	}
 	
+	public function getNumberOfTagsByName($tagName){
+		$numberOfTags = 0;
+		if(isset($tagName)){
+			$nodes = $this->query($tagName,$this->environmentRootNode);
+			if(isset($nodes)){
+				$numberOfTags = $nodes->length;
+			}
+		}
+		return $numberOfTags;
+	}
 	public function getSettings(){
 		return $this->settings;
 	}

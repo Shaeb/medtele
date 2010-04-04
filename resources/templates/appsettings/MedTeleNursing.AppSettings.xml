@@ -13,6 +13,7 @@
 			</registration>
 			<gatedPages>
 				<page>CalendarPage</page>
+				<page>ROFLPage</page>
 			</gatedPages>
 		</security>
 	</development>

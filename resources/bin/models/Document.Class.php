@@ -16,11 +16,15 @@ abstract class Document extends DOMDocument {
 		}
 	}
 
-	protected function query( $tagName ) {
+	protected function query( $tagName, DOMNode $relativeNode = null) {
 		//$this->log( "<!-- start: load $tagName -->" );
 		$xpath = new DOMXPath( $this );
-		$nodes = $xpath->query( "//$tagName" );
-		//$this->log( "<!-- # of nodes: $nodes->length -->" );
+		//$query = (isset($relativeNode)) ? ".//{$tagName}" : "//{$tagName}";
+		if(isset($relativeNode)){
+			$nodes = $xpath->query( ".//{$tagName}", $relativeNode );
+		} else {
+			$nodes = $xpath->query( "//{$tagName}" );
+		}
 		return $nodes;
 	}
 
