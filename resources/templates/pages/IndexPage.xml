@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <page name="IndexPage">
-	<dependency type="style">screen.css</dependency>
+	<dependency type="style" media="screen">dynamic_screen.css</dependency>
+	<dependency type="style" media="screen">dynamic_screen.css</dependency>
+	<dependency type="style" media="screen">dynamic_screen2.css</dependency>
+	<dependency type="style" media="screen">bubbles.css</dependency>
+	<dependency type="script">dynamic_javascript.js</dependency>
+	<dependency type="script">dynamic_javascript.js</dependency>
 	<template>MedTeleNursing.Template.xml</template>
 	<title>Welcome to MedTeleNursing.com</title>
 	<security gate="LoginPage">

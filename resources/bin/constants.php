@@ -14,10 +14,10 @@ define( "MODULE_STREAM_PATH", RESOURCES_PATH . "bin/modules/streams/" );
 define( "MODULE_XSL_PATH", RESOURCES_PATH . "templates/modules/stylesheets/" );
 define( "OBJECT_PATH", "/medtele/resources/bin/models/" ); // so as to not mess up CLASS_PATH
 define( "OBJECT_EXTENSION", ".php" );
-define( "STYLE_PATH", "/medtele/resources/css/" );
+define( "STYLE_PATH", RESOURCES_PATH . "css/" );
 define( "STYLE_EXTENSION", ".css" );
-define( "SCRIPT_PATH", "/medtele/resources/javascript/" );
-define( "SCRIPT_EXTENSION", ".js" );
+define( "JAVASCRIPT_PATH", RESOURCES_PATH . "javascript/" );
+define( "JAVASSCRIPT_EXTENSION", ".js" );
 
 define("BIN_ROOT", $_SERVER["DOCUMENT_ROOT"] . "/medtele/resources/bin/");
 define("BIN_MODEL_ROOT", BIN_ROOT . "models/" );
@@ -32,9 +32,9 @@ define( MODULES_TAG, "modules" );
 define( MODULES_REPLACE_ATTRIBUTE, "replace" );
 define( DEPENDENCY_TAG, "dependency" );
 define( DEPENDENCY_TYPE_ATTRIBUTE_NAME, "type" );
-define( DEPENDENCY_TYPE_CLASS_VALUE, "Class" );
-define( DEPENDENCY_TYPE_STYLE_VALUE, "Style" );
-define( DEPENDENCY_TYPE_SCRIPT_VALUE, "Script" );
+define( DEPENDENCY_TYPE_CLASS_VALUE, "class" );
+define( DEPENDENCY_TYPE_STYLE_VALUE, "style" );
+define( DEPENDENCY_TYPE_SCRIPT_VALUE, "script" );
 define( DEPENDENCY_TYPE_PARAMETER_VALUE, "Parameter" );
 define( DATA_TAG, "data" );
 define( DATA_TYPE_ATTRIBUTE_NAME, "type" );

@@ -32,7 +32,7 @@ class Page extends Document {
 			$nodes = $this->query( $tag );
 			switch( $tag ) {
 				case DEPENDENCY_TAG:
-					//$this->processDependency( $nodes );
+					$this->processDependency( $nodes );
 					break;
 				case TITLE_TAG:
 					$this->processTitle( $nodes );
@@ -106,12 +106,72 @@ class Page extends Document {
 			$this->template->replaceValueOfTag( TITLE_TAG, $this->title);
 		}
 	}
+	
+	// add script and link tag dependencies
+	public function processDependency($nodes){
+		if(!isset($nodes)){
+			return;
+		}
+
+		foreach($nodes as $node){		
+			if($node->hasAttributes()){
+				// setup dependencies
+				$head = $this->template->query("head");
+				if(!isset($head) || 0 == $head->length){
+					return;
+				}
+				// we are really only expecting one head element in an xhtml document ...
+				$head = $head->item(0);
+				$dependencyType = '';
+				$element = null;
+				$compareElements = function($node1,$node2){
+					$linkType = '';
+					$duplicate = true;
+					if(isset($node1) && isset($node2)){
+						$linkType = ($node1->nodeName == "link") ? "href" : "src";
+						if($node1->hasAttribute($linkType) && $node2->hasAttribute($linkType)){
+							$duplicate = (0 == strcmp($node1->getAttribute($linkType), $node2->getAttribute($linkType))) ? true : false;						
+						}
+					}
+					return $duplicate;
+				};
+	
+				if($node->hasAttribute("type")){
+					$dependencyType = $node->getAttribute("type");
+					switch($dependencyType){
+						case DEPENDENCY_TYPE_STYLE_VALUE:
+							$element = $this->template->createElement("link");
+							$element->setAttribute("rel","stylesheet");
+							$element->setAttribute("href", STYLE_PATH . $node->nodeValue);
+							$element->setAttribute("type","text/css");
+							$element->setAttribute("media",(($node->hasAttribute("media")) ? $node->getAttribute("media") : "media"));
+							$this->template->appendUniqueChildToParent($head,$element,$compareElements);							
+							break;
+						case DEPENDENCY_TYPE_SCRIPT_VALUE:
+							$element = $this->template->createElement("script");
+							$element->setAttribute("src", JAVASCRIPT_PATH . $node->nodeValue);
+							$element->setAttribute("type","text/javascript");
+							$this->template->appendUniqueChildToParent($head,$element,$compareElements);
+							break;
+						case DEPENDENCY_TYPE_CLASS_VALUE:
+							if($node->hasAttribute("subtype")){
+								add_required_class( $node->nodeValue, $node->getAttribute("subtype") );
+							}
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+	}
 
 	public function output() {
 		$output = '';
 		$tempOutput = '';
 		$bind = array();
-				
+		
+		// done now on to output ...			
 		// first, we need a list of keys
 		$keys = array_keys( $this->moduleList );
 
