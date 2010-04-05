@@ -17,6 +17,7 @@ class ApplicationController {
 	private function __construct(){
 		$this->connection = DatabaseConnection::getInstance();
 		$this->session = SessionController::getInstance();
+		$this->session->start();
 		$this->appSettings = new ApplicationSettings(APPLICATION_SETTINGS_FILE, ENVIRONMENT);
 		$username = '';
 		if( isset($_SESSION['username'])){

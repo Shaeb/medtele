@@ -58,5 +58,4 @@ require_once( BIN_ROOT . 'helpers/tools.php');
 add_required_class( 'Document.Class.php', MODEL );
 add_required_class( 'Application.Controller.php', CONTROLLER );
 $application = ApplicationController::getInstance();
-$application->session->start();
 ?>
