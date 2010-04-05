@@ -1,3 +1,18 @@
+body {
+	margin: 0;
+}
+
+.paddedContent{
+	padding: 1em;
+}
+	
 label.form {
 	float: left;
+}
+
+.highlight {
+	background-color: #FFFF88;
+	border-top: 1px solid #FFEF5D;
+	border-bottom: 1px solid #FFEF5D;
+	padding-left: 0.5em;
 }

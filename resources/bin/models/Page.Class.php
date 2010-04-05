@@ -85,9 +85,20 @@ class Page extends Document {
 				foreach( $modules->childNodes as $module ) {
 					// now, we only care about processing <module>
 					if( MODULE_TAG == $module->nodeName ) {
-						$tempModule = new Module( $module->nodeValue );
-						array_push( $this->moduleList[ $attributeValue ], $tempModule );
-						$tempModule = null;
+						if($module->hasAttribute(AUTHENTICATED_ATTRIBUTE_NAME)){
+							global $application;
+							echo $module->nodeValue;							
+							if('true' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && true == $application->session->isSessionAuthenticated()) {
+								array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );								
+							} else {
+								// for modules that should show up only if there is no session
+								if('false' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && false == $application->session->isSessionAuthenticated()) {
+									array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );
+								}
+							}
+						} else {
+							array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );
+						}
 					}
 				}
 				$attributeValue = ''; //reset

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <page name="IndexPage">
-	<dependency type="style" media="screen">dynamic_screen.css</dependency>
+	<dependency type="style" media="screen">medtele_screen.css</dependency>
 	<dependency type="style" media="screen">dynamic_screen.css</dependency>
 	<dependency type="style" media="screen">dynamic_screen2.css</dependency>
 	<dependency type="style" media="screen">bubbles.css</dependency>
@@ -25,7 +25,7 @@
 		<module>LoginModule</module>
 	</modules>
 	<modules replace="loginRegistrationPanel">
-		<module>LoginRegistrationModule</module>
-		<module>UserProfileModule</module>
+		<module authenticated="false">LoginRegistrationModule</module>
+		<module authenticated="true">UserProfileModule</module>
 	</modules>
 </page>

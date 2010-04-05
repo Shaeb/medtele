@@ -3,7 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>MedTeleNursing.com - The Nurses of MSU and TMU @ Health Central</title>
-		<link rel="stylesheet" title="Standard" href="http://localhost/medtele/resources/css/techweaver_screen.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="http://localhost/medtele/resources/css/bubbles.css" type="text/css" media="screen" charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost/medtele/resources/css/menu.css" type="text/css" media="screen" charset="utf-8" />
 		<link type="text/css" rel="stylesheet" href="http://localhost/medtele/resources/css/lightbox.css" media="screen" />
@@ -30,56 +29,21 @@
 </head>
 
 <body>
-
-<div id="topsection">
-
-	<div id="logo">
-		<a href="index.htm"><img src="resources/images/weblogo.png" alt="Techweaver Computer Services" /></a>
-
-	</div>
-
-	<div id="navbar">
-		<div class="tabs">
-			<ul>
-			<li><a href="/view/IndexPage">Home</a></li>
-			<li><a href="./personal.htm">Personal</a></li>
-			<li><a href="./business.htm">Business</a></li>
-
-			<li><a href="./information.php">Contact Us</a></li>
-			<li><a href="./download.htm">Downloads</a></li>
-			<li><a href="./weavernet.htm">WeaverNET</a></li>
-			</ul>
-		</div>
-	</div>
-
+<h1 id="header" class="paddedContent">MedTeleNursing.com</h1>
+<div id="navigation">
+	<ul>
+		<li><a href="/page/IndexPage">Home</a></li>
+		<li><a href="/page/IndexPage">Home</a></li>
+		<li><a href="/page/IndexPage">Home</a></li>
+		<li><a href="/page/IndexPage">Home</a></li>
+		<li><a href="/page/IndexPage">Home</a></li>
+	</ul>
 </div>
-
-
-<div id="maincontainer">
-
-<div id="leftcolumn">
 <replace id="leftModule">
 </replace>
-</div>
-
-	<div id="centercolumn">
-<replace id="mainModule">
-</replace>
-				<div class="shiftcontainer">					
-				</div>
-
-	</div>
-
-</div>
-
-
-
-<div id="bottomcontainer">
-
-	<div id="footer">
-		<div id="footerinfo"><div id="footertext">Techweaver Computer Services - Daytona Beach, Fl 32114 - helpdesk@techweaver.net - 386.236.9792</div></div>
-	</div>
-
+<div class="paddedContent">
+	<replace id="mainModule">
+	</replace>
 </div>
 <!-- Panel -->
 <replace id="loginRegistrationPanel"></replace> 
