@@ -86,8 +86,7 @@ class Page extends Document {
 					// now, we only care about processing <module>
 					if( MODULE_TAG == $module->nodeName ) {
 						if($module->hasAttribute(AUTHENTICATED_ATTRIBUTE_NAME)){
-							global $application;
-							echo $module->nodeValue;							
+							global $application;							
 							if('true' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && true == $application->session->isSessionAuthenticated()) {
 								array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );								
 							} else {
