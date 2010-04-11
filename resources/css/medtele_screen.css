@@ -16,3 +16,39 @@ label.form {
 	border-bottom: 1px solid #FFEF5D;
 	padding-left: 0.5em;
 }
+
+/******* Calendar Settings ****/
+table.calendar_table {
+	width: 100%;
+	text-align: center;
+	position: relative;
+}
+
+.calendar_row td {
+	border-top: 1px solid #C3D9FF;
+	border-left: 1px solid #C3D9FF;
+	height: 5em;
+}
+
+.calendar_bottom_row td {
+	border-bottom: 1px solid #C3D9FF;
+}
+
+.calendar_table tbody td {
+	/*border: 1px solid #C3D9FF;*/
+}
+
+.calendar_date_not_in_month {
+	color: #AFAFAF;
+}
+
+.calendar_last_column {
+	border-right: 1px solid #C3D9FF;
+}
+div.calendar_date {
+	background-color: #C3D9FF;
+	position: relative;
+	top: -2em;
+	text-align: right;
+	padding-right: 0.5em;
+}
