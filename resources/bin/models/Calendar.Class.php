@@ -44,8 +44,10 @@ class Calendar extends Document {
 			if( $createForDate instanceof DateTime ) {
 				$this->today = $createForDate;
 			}
-			if( is_string( $createForDate ) && isset($format) ) {
-				$this->today = DateTime::createFromFormat($format, $createForDate);
+			//if( is_string( $createForDate ) && isset($format) ) {
+			if( is_string( $createForDate ) ) {
+				//$this->today = DateTime::createFromFormat($format, $createForDate);
+				$this->today = date_create($createForDate);
 			}
 		} else {
 			$this->today = new DateTime();			
@@ -61,8 +63,10 @@ class Calendar extends Document {
 		//$this->daysInMonth = date('t', $this->today->getTimestamp());
 		$this->daysInMonth = date('t', $this->today->format("U"));
 		$this->dayOfMonthToDisplay = 1;
-		$this->firstDay = DateTime::createFromFormat($this->format,"{$this->year}-{$this->mon}-01");
-		$this->lastDay = DateTime::createFromFormat($this->format,"{$this->year}-{$this->mon}-{$this->daysInMonth}");
+		//$this->firstDay = DateTime::createFromFormat($this->format,"{$this->year}-{$this->mon}-01");
+		$this->firstDay = date_create("{$this->year}-{$this->mon}-01");
+		//$this->lastDay = DateTime::createFromFormat($this->format,"{$this->year}-{$this->mon}-{$this->daysInMonth}");
+		$this->lastDay = date_create("{$this->year}-{$this->mon}-{$this->daysInMonth}");
 		//$this->firstDayInfo = getdate($this->firstDay->getTimestamp());
 		$this->firstDayInfo = getdate($this->firstDay->format("U"));
 		//$this->lastDayInfo = getdate($this->lastDay->getTimestamp());
@@ -83,7 +87,8 @@ class Calendar extends Document {
 			$this->previousMonthYear--;
 		}
 		
-		$this->previousMonth = DateTime::createFromFormat($this->format,"{$this->previousMonthYear}-{$this->previousMonthMonth}-{$this->previousMonthFirstDay}");
+		//$this->previousMonth = DateTime::createFromFormat($this->format,"{$this->previousMonthYear}-{$this->previousMonthMonth}-{$this->previousMonthFirstDay}");
+		$this->previousMonth = date_create("{$this->previousMonthYear}-{$this->previousMonthMonth}-{$this->previousMonthFirstDay}");
 		//$this->daysInPreviousMonth = date("t",$this->previousMonth->getTimestamp());
 		$this->daysInPreviousMonth = 31;
 		$this->displayDaysForNextMonth = 1;
