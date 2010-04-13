@@ -134,6 +134,10 @@ class Page extends Document {
 				$head = $head->item(0);
 				$dependencyType = '';
 				$element = null;
+				
+				/********************************************
+				 * current host is 5.2.1, does not support closures, will update when host updates
+				 
 				$compareElements = function($node1,$node2){
 					$linkType = '';
 					$duplicate = true;
@@ -145,7 +149,8 @@ class Page extends Document {
 					}
 					return $duplicate;
 				};
-	
+				*/
+				
 				if($node->hasAttribute("type")){
 					$dependencyType = $node->getAttribute("type");
 					switch($dependencyType){
@@ -155,7 +160,7 @@ class Page extends Document {
 							$element->setAttribute("href", STYLE_PATH . $node->nodeValue);
 							$element->setAttribute("type","text/css");
 							$element->setAttribute("media",(($node->hasAttribute("media")) ? $node->getAttribute("media") : "media"));
-							$this->template->appendUniqueChildToParent($head,$element,$compareElements);							
+							$this->template->appendUniqueChildToParent($head,$element,array("Page", "compareElements"));							
 							break;
 						case DEPENDENCY_TYPE_SCRIPT_VALUE:
 							$element = $this->template->createElement("script");
@@ -174,6 +179,18 @@ class Page extends Document {
 				}
 			}
 		}
+	}
+	
+	public static function compareElements($node1,$node2){
+		$linkType = '';
+		$duplicate = true;
+		if(isset($node1) && isset($node2)){
+			$linkType = ($node1->nodeName == "link") ? "href" : "src";
+			if($node1->hasAttribute($linkType) && $node2->hasAttribute($linkType)){
+				$duplicate = (0 == strcmp($node1->getAttribute($linkType), $node2->getAttribute($linkType))) ? true : false;						
+			}
+		}
+		return $duplicate;
 	}
 
 	public function output() {

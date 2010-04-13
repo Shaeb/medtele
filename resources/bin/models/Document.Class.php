@@ -50,8 +50,8 @@ abstract class Document extends DOMDocument {
 				foreach($nodes as $node){
 					if(isset($compare)) {
 						//will call user-supplied compare function
-						//$duplicate = call_user_func($compare, $child, $node);
-						$duplicate = $compare($child, $node);
+						$duplicate = call_user_func($compare, $child, $node);
+						//$duplicate = $compare($child, $node);
 						if($duplicate){
 							break;
 						}
