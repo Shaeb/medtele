@@ -3,7 +3,7 @@ add_required_class( 'Application.Controller.php', CONTROLLER );
 class User {
 	var $username = '';
 	var $password = '';
-	var $userLevel = 0;
+	var $userLevel = 2;
 	var $lastLogin = null;
 	var $isAuthenticated = false;
 
@@ -26,7 +26,7 @@ class User {
 			}
 		}
 
-		$query = "select userId, username, userLevel from user where username='{$this->username}' and password='{$this->password}';";
+		$query = "select userId, username, userLevel from users where username='{$this->username}' and password='{$this->password}';";
 
 		if( !$connection->query( $query ) ) {
 			return $this->isAuthenticated;
@@ -44,7 +44,7 @@ class User {
 		$lastLogin = date( 'Y-m-d H:i:s' );
 		$ipAddress = $_SERVER['REMOTE_ADDR'];
 
-		$query = "update user set lastLogin = '{$lastLogin}', ipaddress = '{$ipAddress}', isLoggedIn = 1 where userId={$user->userId}";
+		$query = "update users set lastLogin = '{$lastLogin}', ipaddress = '{$ipAddress}', isLoggedIn = 1 where userId={$user->userId}";
 
 		if( !$connection->queryExecute( $query ) ){
 			return $this->isAuthenticated;
@@ -61,7 +61,7 @@ class User {
 		// updated time logged in
 		$lastLogin = date( 'Y-m-d H:i:s' );
 		$ipAddress = $_SERVER['REMOTE_ADDR'];
-		$query = "insert into user( username, password, userLevel, lastLogin, isLoggedIn, ipaddress ) values( '{$this->username}', '{$this->password}', " .
+		$query = "insert into users( username, password, userLevel, lastLogin, isLoggedIn, ipaddress ) values( '{$this->username}', '{$this->password}', " .
 			"{$this->userLevel}, '{$lastLogin}', true, '{$ipAddress}' );";
 
 		if( !$connection->Connect() ){
@@ -88,7 +88,7 @@ class User {
 			}
 		}
 
-		$query = "select userId, username, userLevel, ipaddress, isLoggedIn, lastLogin from user where username='{$this->username}';";
+		$query = "select userId, username, userLevel, ipaddress, isLoggedIn, lastLogin from users where username='{$this->username}';";
 
 		if( !$connection->query( $query ) ) {
 			return $this->isAuthenticated;
