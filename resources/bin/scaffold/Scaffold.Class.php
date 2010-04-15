@@ -233,12 +233,14 @@ class ScaffoldObject{
 		$tableName = $this->data["table_name"];
 		$key = $this->data["references"]["primary_key"];
 		$arguments = func_get_args();
-		$query = "select [FIELDS] from {$tableName}";
+		$query = "select [FIELDS] from {$tableName} [WHERE] [ORDER]";
+		$whereClause = "";
+		$orderClause = "";
 		$options = null;
 		
 		//ex: $o->find(1) will search for a primary key = 1;
-		if(is_numeric($arguments[0])){
-			$query .= " where {$key} = {$arguments[0]};";
+		if(1 <= $numberOfArguments && is_numeric($arguments[0])){
+			$whereClause = " where {$key} = {$arguments[0]}";
 		}
 		// will find all in any case
 		if(0 == strcasecmp("all", $arguments[0]) || 1 == $numberOfArguments){
@@ -250,6 +252,9 @@ class ScaffoldObject{
 				$options = $arguments[1];
 				if(array_key_exists("filters",$options)){
 					$length = count($options["filters"]);
+					if(!array_key_exists($key,$options["filters"])){
+						$fields .= "{$key}, ";
+					}
 					for($i = 0; $i < $length; ($i++)){
 						if(array_key_exists($options["filters"][$i], $this->values)) {
 							$fields .= ( $i == ($length - 1)) ? $options["filters"][$i] : $options["filters"][$i] . ", ";
@@ -259,16 +264,38 @@ class ScaffoldObject{
 					$fields = "*";
 				}
 				
-				echo $fields;
-				$regexStrip = "/\,$/";
+				$regexStrip = "/,\s$/";
 				$fields = preg_replace($regexStrip, "", $fields);
-				echo $fields;
+
+				if(array_key_exists("conditions",$options)){
+					$regexOperators = "/^[\>\<\=\!]{1,2}/";
+					$conditions = $options["conditions"];
+					$keys = array_keys($conditions);
+					foreach($keys as $key){
+						$matches = array();
+						if(0 != preg_match_all($regexOperators, $conditions[$key],$matches)){
+							$whereClause .= " and {$key} {$conditions[$key]}";
+						} else {
+							$whereClause .= " and {$key} = {$conditions[$key]}";
+						}
+					}
+					
+					$regexStrip = "/\sand\s$/";
+					$fields = preg_replace($regexStrip, "", $fields);
+				}
+				
+				if(array_key_exists("order_by",$options) && array_key_exists($options["order_by"],$this->values)){
+					$orderClause = " order by " . $options["order_by"] . " 	";
+					$orderClause .= (array_key_exists("order_type",$options)) ? $options["order_type"] : "desc";
+				}
+				
 				$query = str_replace("[FIELDS]", $fields, $query);
+				$query = str_replace("[WHERE]", $whereClause, $query);
+				$query = str_replace("[ORDER]", $orderClause, $query);
 			}
 		}
 		
-		echo $query;
-		exit();
+		$query .= ";";
 		
 		$this->connection->connect();
 		$this->connection->query($query);
@@ -280,6 +307,36 @@ class ScaffoldObject{
 				$this->values[$key] = $result[$key];
 			} 
 		}	
+	}
+	
+	public function update(){
+		$tableName = $this->data["table_name"];
+		$primaryKey = $this->data["references"]["primary_key"];
+		$query = "update {$tableName} set [FIELDS] where {$primaryKey} = " . $this->values[$primaryKey] . ";";
+		
+		$keys = array_keys($this->values);
+		foreach($keys as $key){
+			if($primaryKey != $key and isset($this->values[$key])){
+				$fields .= "{$key} = '{$this->values[$key]}', "; // you can always add quotes, mysql will handle numbers just fine
+			}
+		}
+		$regexStrip = "/,\s$/";
+		$fields = preg_replace($regexStrip, "", $fields);
+		$query = str_replace("[FIELDS]", $fields, $query);
+		echo $query;
+		
+		$this->connection->connect();
+		$success = $this->connection->queryExecute($query);
+		
+		return $success;
+	}
+	
+	public function delete(){
+		
+	}
+	
+	public function add(){
+		
 	}
 }
 
@@ -303,7 +360,10 @@ $tables = $scaffold->getTables();
 ////}
 $object = new ScaffoldObject($tables["Users"], $database);
 print_r($object->values);
-$object->find(1, array( "filters" => array("username", "password", "ipaddress", "caps lock")));
+$object->find(1, array( "filters" => array( "username", "password", "ipaddress", "caps lock"),
+						"conditions" => array("userLevel" => "> 1", "ipaddress" => "'::1'"),
+						"order_by" => "username", "order_type" => "asc"));
 echo "<hr/>";
-print_r($object->values);
+$object->username = 'soulblast@gmail.com';
+$object->update();
 ?>
