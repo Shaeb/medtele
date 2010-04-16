@@ -170,11 +170,13 @@ class ScaffoldObject{
 	public function __construct($dataMap, DatabaseConnection $connection){
 		if(isset($dataMap) && isset($connection)){
 			$this->connection = $connection;
-			$this->data = $dataMap;
+			$this->data = (isset($dataMap) && is_array($dataMap)) ? $dataMap : array();
 			if(array_key_exists("fields",$this->data)){
 				foreach($this->data["fields"] as $field){
 					$this->values[$field["field"]] = $field["value"];
 				}
+			} else {
+				$this->values = array();
 			}
 		}
 	}
@@ -233,14 +235,15 @@ class ScaffoldObject{
 		$tableName = $this->data["table_name"];
 		$key = $this->data["references"]["primary_key"];
 		$arguments = func_get_args();
-		$query = "select [FIELDS] from {$tableName} [WHERE] [ORDER]";
+		$query = "select [FIELDS] from {$tableName}";
 		$whereClause = "";
 		$orderClause = "";
 		$options = null;
 		
 		//ex: $o->find(1) will search for a primary key = 1;
 		if(1 <= $numberOfArguments && is_numeric($arguments[0])){
-			$whereClause = " where {$key} = {$arguments[0]}";
+			$query .= " where {$key} = {$arguments[0]}";
+			$query = str_replace("[FIELDS]", "*", $query);
 		}
 		// will find all in any case
 		if(0 == strcasecmp("all", $arguments[0]) || 1 == $numberOfArguments){
@@ -268,6 +271,7 @@ class ScaffoldObject{
 				$fields = preg_replace($regexStrip, "", $fields);
 
 				if(array_key_exists("conditions",$options)){
+					$query .=  "[WHERE] ";
 					$regexOperators = "/^[\>\<\=\!]{1,2}/";
 					$conditions = $options["conditions"];
 					$keys = array_keys($conditions);
@@ -284,7 +288,8 @@ class ScaffoldObject{
 					$fields = preg_replace($regexStrip, "", $fields);
 				}
 				
-				if(array_key_exists("order_by",$options) && array_key_exists($options["order_by"],$this->values)){
+				if(array_key_exists("order_by",$options) && array_key_exists($options["order_by"],$this->values)){					
+				 	$query .= " [ORDER]";
 					$orderClause = " order by " . $options["order_by"] . " 	";
 					$orderClause .= (array_key_exists("order_type",$options)) ? $options["order_type"] : "desc";
 				}
@@ -300,7 +305,7 @@ class ScaffoldObject{
 		$this->connection->connect();
 		$this->connection->query($query);
 		$results = $this->connection->getResults();
-		
+		echo $query . " : ";
 		while($result = mysql_fetch_array($results, MYSQL_ASSOC)){
 			$keys = array_keys($result);
 			foreach($keys as $key){
@@ -331,12 +336,94 @@ class ScaffoldObject{
 		return $success;
 	}
 	
-	public function delete(){
-		
-	}
-	
 	public function add(){
+		if(!isset($this->data["table_name"])){
+			return false;
+		}
+		if(!isset($this->connection)){
+			return false;
+		}
+		$tableName = $this->data["table_name"];
+		$query = "insert into {$tableName}([FIELDS]) values([VALUES]);";
+		$keys = array_keys($this->values);
+		$field = "";
+		$values = "";
+		foreach( $keys as $key){
+			if(isset($this->values[$key])){
+				$fields .= "{$key},";
+				$values .= "'{$this->values[$key]}',";
+			}	
+		}
+		$regexStrip = "/,$/";
+		$fields = preg_replace($regexStrip, "", $fields);
+		$values = preg_replace($regexStrip,"",$values);
+	
+		$query = str_replace("[FIELDS]", $fields, $query);
+		$query = str_replace("[VALUES]", $values, $query);	
+		$query .- ";";
+		$this->connection->connect();
+		$success = $this->connection->queryExecute($query);
 		
+		return $success;
+	}
+
+	public function delete(){
+		if(!isset($this->data["references"]["primary_key"])){
+			return false;
+		}
+		if(!isset($this->data["table_name"])){
+			return false;
+		}
+		if(!isset($this->connection)){
+			return false;
+		}
+		$primaryKey = $this->data["references"]["primary_key"];
+		$tableName = $this->data["table_name"];
+		$query = "delete from {$tableName} where {$primaryKey} = '{$this->values[$primaryKey]}';";
+	
+		$this->connection->connect();
+		$success = $this->connection->queryExecute($query);
+		
+		return $success;
+	}
+}
+
+class ScaffoldFactory{
+	private $scaffold;
+	private $tables;
+	private $objects;
+	private $connection;
+	private static $instance;
+	
+	private function __construct(DatabaseConnection $connection){
+		if(isset($connection)){
+			$this->connection = $connection;
+			$this->scaffold = new Scaffold($this->connection);
+			$this->objects = array();
+		}
+	}	
+
+	public static function getInstance(DatabaseConnection $connection) {
+		if( !isset( self::$instance ) ) {
+			self::$instance = new ScaffoldFactory($connection);
+		}
+		return self::$instance;
+	}
+
+	public function buildScaffoldObject($tableName){
+		if(!isset($tableName)){
+			return null;
+		}
+		if(array_key_exists($tableName,$this->objects)){
+			return $this->objects[$tableName];
+		}
+		
+		$this->scaffold->getTableData();
+		$this->scaffold->getTableDefinitionData($tableName);
+		$tables = $this->scaffold->getTables();
+		$object = new ScaffoldObject($tables[$tableName], $this->connection);
+		$this->objects[$tableName] = $object;
+		return $object;
 	}
 }
 
@@ -351,19 +438,30 @@ foreach($tables as $table){
 	$scaffold->getTableDefinitionData($table);
 }
 //echo "<h1>table definitions</h1>";
-$tables = $scaffold->getTables();
+//$tables = $scaffold->getTables();
 //$tableNames = array_keys($tables);
 ////foreach($tableNames as $table){
 ////	echo "<h3>{$table}</h3><p>";
 ////	echo print_r($tables[$table]);
 ////	echo "</p>";
 ////}
-$object = new ScaffoldObject($tables["Users"], $database);
-print_r($object->values);
+$factory = ScaffoldFactory::getInstance($database);
+//$object = new ScaffoldObject($tables["Users"], $database);
+$object = $factory->buildScaffoldObject("Users");
+//print_r($object);
 $object->find(1, array( "filters" => array( "username", "password", "ipaddress", "caps lock"),
 						"conditions" => array("userLevel" => "> 1", "ipaddress" => "'::1'"),
 						"order_by" => "username", "order_type" => "asc"));
 echo "<hr/>";
-$object->username = 'soulblast@gmail.com';
-$object->update();
+print_r($object->values);
+echo "<hr/>";
+$object2 = $object;
+$object2->userId = null;
+$object2->username = 'medtele@gmail.com';
+$object2->userLevel = 2;
+//$object->add();
+$object3 = $factory->buildScaffoldObject("Users");
+$object3->find(4);
+$object3->delete();
+print_r($object3);
 ?>
