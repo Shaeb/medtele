@@ -33,4 +33,20 @@
 			<databasename>medtelen_medtele</databasename>
 		</database>
 	</production>
+	<scaffolding>
+		<templates table="Users">
+			<find>Users.Find.Part.xml</find>
+			<add>Users.Add.Part.xml</add>
+			<delete>Users.Delete.Part.xml</delete>
+			<update>Users.Delete.Part.xml</update>
+			<list>Users.List.Part.xml</list>
+		</templates>
+		<templates table="UserLevels">
+			<find>Users.Find.Part.xml</find>
+			<add>Users.Add.Part.xml</add>
+			<delete>Users.Delete.Part.xml</delete>
+			<update>Users.Delete.Part.xml</update>
+			<list>Users.List.Part.xml</list>
+		</templates>
+	</scaffolding>
 </applicationSettings>
