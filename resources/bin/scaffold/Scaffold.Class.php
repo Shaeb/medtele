@@ -74,9 +74,7 @@ class Scaffold{
 			$values = null;
 			$num = preg_match_all($regexForeignKeys, $result[1], $values);
 			foreach( $values[0] as $value){
-				//print_r($value);
 				$num = preg_match_all( $regexFields, $value, $matches);
-				//print_r($matches);
 				if(3 == $num){
 					$foreign_key = preg_replace($regexRemoveBackticks, "", $matches[0][0]);
 					$referenced_table = preg_replace($regexRemoveBackticks, "", $matches[0][1]);
@@ -85,7 +83,6 @@ class Scaffold{
 				}
 				$matches = null;
 			}
-			//print_r($map);
 			$this->tables[$tableName]["references"]["foreign_keys"] = $map;
 		}
 	}
@@ -94,74 +91,6 @@ class Scaffold{
 		return $this->tables;
 	}
 }
-
-/*******
- *     [Employees] => Array
-        (
-            [table_name] => Employees
-            [fields] => Array
-                (
-                    [0] => Array
-                        (
-                            [field] => employeeId
-                            [type] => int(11)
-                            [null] => NO
-                            [key] => PRI
-                            [default] => 
-                            [extra] => auto_increment
-                            [value] => 
-                        )
-
-                    [1] => Array
-                        (
-                            [field] => userId
-                            [type] => int(11)
-                            [null] => NO
-                            [key] => MUL
-                            [default] => 
-                            [extra] => 
-                            [value] => 
-                        )
-
-                    [2] => Array
-                        (
-                            [field] => employeeTitleId
-                            [type] => int(11)
-                            [null] => NO
-                            [key] => MUL
-                            [default] => 
-                            [extra] => 
-                            [value] => 
-                        )
-
-                )
-
-            [references] => Array
-                (
-                    [primary_key] => employeeId
-                    [foreign_keys] => Array
-                        (
-                            [0] => Array
-                                (
-                                    [foreign_key] => employeeTitleId
-                                    [referenced_table] => employeetitles
-                                    [referenced_field] => employeeTitleId
-                                )
-
-                            [1] => Array
-                                (
-                                    [foreign_key] => userId
-                                    [referenced_table] => users
-                                    [referenced_field] => userId
-                                )
-
-                        )
-
-                )
-
-        )
-
- */
 class ScaffoldObject{
 	private $data;
 	private $values;
@@ -426,42 +355,4 @@ class ScaffoldFactory{
 		return $object;
 	}
 }
-
-$database = $application->getDatabaseConnection();
-
-$scaffold = new Scaffold($database);
-$scaffold->getTableData();
-//echo "<h1>Table Names</h1>";
-//print_r($scaffold->getTables());
-$tables = $scaffold->getTables();
-foreach($tables as $table){
-	$scaffold->getTableDefinitionData($table);
-}
-//echo "<h1>table definitions</h1>";
-//$tables = $scaffold->getTables();
-//$tableNames = array_keys($tables);
-////foreach($tableNames as $table){
-////	echo "<h3>{$table}</h3><p>";
-////	echo print_r($tables[$table]);
-////	echo "</p>";
-////}
-$factory = ScaffoldFactory::getInstance($database);
-//$object = new ScaffoldObject($tables["Users"], $database);
-$object = $factory->buildScaffoldObject("Users");
-//print_r($object);
-$object->find(1, array( "filters" => array( "username", "password", "ipaddress", "caps lock"),
-						"conditions" => array("userLevel" => "> 1", "ipaddress" => "'::1'"),
-						"order_by" => "username", "order_type" => "asc"));
-echo "<hr/>";
-print_r($object->values);
-echo "<hr/>";
-$object2 = $object;
-$object2->userId = null;
-$object2->username = 'medtele@gmail.com';
-$object2->userLevel = 2;
-//$object->add();
-$object3 = $factory->buildScaffoldObject("Users");
-$object3->find(4);
-$object3->delete();
-print_r($object3);
 ?>
