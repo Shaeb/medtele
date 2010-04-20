@@ -1,5 +1,5 @@
 <?php
-require_once( '../constants.php' );
+//require_once( '../constants.php' );
 class Scaffold{
 	private $connection;
 	private $tables;
@@ -117,6 +117,10 @@ class ScaffoldObject{
 		} else {
 			if(array_key_exists($name,$this->values)){
 				$value = $this->values[$name];
+			} else {
+				if(array_key_exists($name,$this->data)){
+					$value = $this->data[$name];
+				}
 			}
 		}
 		return $value;
@@ -234,7 +238,6 @@ class ScaffoldObject{
 		$this->connection->connect();
 		$this->connection->query($query);
 		$results = $this->connection->getResults();
-		echo $query . " : ";
 		while($result = mysql_fetch_array($results, MYSQL_ASSOC)){
 			$keys = array_keys($result);
 			foreach($keys as $key){
@@ -257,7 +260,6 @@ class ScaffoldObject{
 		$regexStrip = "/,\s$/";
 		$fields = preg_replace($regexStrip, "", $fields);
 		$query = str_replace("[FIELDS]", $fields, $query);
-		echo $query;
 		
 		$this->connection->connect();
 		$success = $this->connection->queryExecute($query);

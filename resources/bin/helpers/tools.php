@@ -2,6 +2,7 @@
 define( MODEL, "MODEL");
 define( CONTROLLER, "CONTROLLER");
 define( MODULE, "MODULE");
+define( SCAFFOLD, "SCAFFOLD");
 
 function send_to( $page ) {
 	header("Location: " . APP_ADDRESS . "page/{$page}");
@@ -18,6 +19,9 @@ function add_required_class( $class, $type = '') {
 			break;
 		case MODULE:
 			$root = BIN_MODULE_ROOT;
+			break;
+		case SCAFFOLD:
+			$root = BIN_SCAFFOLD_ROOT;
 			break;
 		default:
 			$root = BIN_ROOT;

@@ -3,5 +3,6 @@ RewriteEngine on
 RewriteRule ^view/patient/([^/]+)/([^/]+) /view.php?patientId=$1&page=$2 [NC]
 RewriteRule ^page/([^/]+) /medtele/index.php?page=$1 [NC]
 RewriteRule ^user/([^/]+\/?) /user.php?username=$1 [NC]
+RewriteRule ^scaffold/([^/]+)/([^/]+)/([\d]+) /medtele/scaffold.php?action=$1&table=$2&id=$3 [NC]
 RewriteRule ^scaffold/([^/]+)/([^/]+) /medtele/scaffold.php?action=$1&table=$2 [NC]
 RewriteRule ^scaffold/([^/]+) /medtele/scaffold.php?action=$1 [NC]
