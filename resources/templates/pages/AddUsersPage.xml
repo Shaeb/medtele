@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<page name="IndexPage">
+<page name="AddUsersPage">
 	<dependency type="style" media="screen">medtele_screen.css</dependency>
 	<dependency type="style" media="screen">animation_screen.css</dependency>
 	<dependency type="script">jquery.application.js</dependency>
 	<template>MedTeleNursing.Template.xml</template>
-	<title>Welcome to MedTeleNursing.com</title>
+	<title>Welcome to MedTeleNursing.com - Add a User Scaffolding</title>
 	<security gate="LoginPage">
 		<session>true</session>
 		<userAccess>
@@ -16,7 +16,11 @@
 	</security>
 	<modules replace="mainModule">
 		<module>FlashModule</module>
-		<module>IndexModule</module>
+		<scaffolding dynamic="true">
+		    <action>add</action>
+		    <template>Users.Add.Part.xml</template>
+		    <object>Users</object>
+		</scaffolding>		
 	</modules>
 	<modules replace="leftModule">
 		<module>LoginModule</module>

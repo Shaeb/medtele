@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<page name="IndexPage">
+<page name="CalendarDemoPage">
 	<dependency type="style" media="screen">medtele_screen.css</dependency>
 	<dependency type="style" media="screen">animation_screen.css</dependency>
 	<dependency type="script">jquery.application.js</dependency>
 	<template>MedTeleNursing.Template.xml</template>
-	<title>Welcome to MedTeleNursing.com</title>
+	<title>Welcome to MedTeleNursing.com - View Your Calendar</title>
 	<security gate="LoginPage">
 		<session>true</session>
 		<userAccess>
@@ -16,13 +16,10 @@
 	</security>
 	<modules replace="mainModule">
 		<module>FlashModule</module>
-		<module>IndexModule</module>
-	</modules>
-	<modules replace="leftModule">
-		<module>LoginModule</module>
+		<module>CalendarModule</module>
 	</modules>
 	<modules replace="loginRegistrationPanel">
-		<module authenticated="false">LoginRegistrationModule</module>
-		<module authenticated="true">UserProfileModule</module>
+		<module>LoginRegistrationModule</module>
+		<module>UserProfileModule</module>
 	</modules>
 </page>

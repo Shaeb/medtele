@@ -46,7 +46,7 @@ define( DATA_TYPE_DYNAMICFILE_VALUE, "DynamicFile" );
 define( DATA_TYPE_STATICFILE_VALUE, "StaticFile" );
 define( DATA_TYPE_PROCESSOR_VALUE, "Processor" );
 define( STYLESHEET_TAG, "stylesheet" );
-define( TEMPLATE_PATH, 'http://' . $_SERVER['HTTP_HOST'] .  "resources/templates/templates/" );
+define( TEMPLATE_PATH, 'http://' . $_SERVER['HTTP_HOST'] .  APP_PREFIX . 	"resources/templates/templates/" );
 define( TEMPLATE_TAG, "template" );
 define( REPLACE_TAG, "replace" );
 define( REPLACE_TAG_REPLACE_ATTRIBUTE, "id" );
