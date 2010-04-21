@@ -1,5 +1,12 @@
 <?php
 //require_once( '../constants.php' );
+define(ACTION_ADD, "add");
+define(ACTION_LIST, "list");
+define(ACTION_DELETE, "delete");
+define(ACTION_UPDATE, "update");
+define(ACTION_FIND, "find");
+define(DEFAULT_TABLE, "Default");
+
 class Scaffold{
 	private $connection;
 	private $tables;
@@ -95,6 +102,7 @@ class ScaffoldObject{
 	private $data;
 	private $values;
 	private $connection;
+	public $primaryKey;
 	
 	public function __construct($dataMap, DatabaseConnection $connection){
 		if(isset($dataMap) && isset($connection)){
@@ -107,6 +115,7 @@ class ScaffoldObject{
 			} else {
 				$this->values = array();
 			}
+			$this->primaryKey = $this->data["references"]["primary_key"];
 		}
 	}
 	
@@ -172,6 +181,7 @@ class ScaffoldObject{
 		$whereClause = "";
 		$orderClause = "";
 		$options = null;
+		$findAll = false;
 		
 		//ex: $o->find(1) will search for a primary key = 1;
 		if(1 <= $numberOfArguments && is_numeric($arguments[0])){
@@ -181,6 +191,7 @@ class ScaffoldObject{
 		// will find all in any case
 		if(0 == strcasecmp("all", $arguments[0]) || 1 == $numberOfArguments){
 			$query = str_replace("[FIELDS]", "*", $query);
+			$findAll = true;
 		}
 		
 		if( 2 <= $numberOfArguments ) {
@@ -238,12 +249,15 @@ class ScaffoldObject{
 		$this->connection->connect();
 		$this->connection->query($query);
 		$results = $this->connection->getResults();
+		$objects = array();
 		while($result = mysql_fetch_array($results, MYSQL_ASSOC)){
 			$keys = array_keys($result);
 			foreach($keys as $key){
 				$this->values[$key] = $result[$key];
 			} 
-		}	
+			$objects[] = clone $this;
+		}
+		return $objects;
 	}
 	
 	public function update(){
@@ -261,6 +275,7 @@ class ScaffoldObject{
 		$fields = preg_replace($regexStrip, "", $fields);
 		$query = str_replace("[FIELDS]", $fields, $query);
 		
+		echo $query;
 		$this->connection->connect();
 		$success = $this->connection->queryExecute($query);
 		

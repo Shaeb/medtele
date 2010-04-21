@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form action="/medtele/scaffold/delete/Users" method="POST">
+	<input type="hidden" name="object" value="[OBJECTNAME]"/>
+	<input type="hidden" name="id" value="[userId_VALUE]"/>
+	<input type="hidden" name="[userId]" value="[userId_VALUE]"/>
+	<input type="hidden" name="action" value="[ACTION]"/>
+	<p>
+		<label for="[username]">Username:</label><input type="text" name="[username]" id="[username]_field" value="[username_VALUE]"/>
+	</p>
+	<p>
+		<label for="[password]">password:</label><input type="password" name="[password]" id="[password]_field" value="[password_VALUE]"/>
+	</p>
+	<p>
+		<label for="[userLevel]">User Level:</label><input type="text" name="[userLevel]" id="[userLevel]_field" value="[userLevel_VALUE]"/>
+	</p>
+	<input type="submit" name="submit" value="Delete"/>
+</form>

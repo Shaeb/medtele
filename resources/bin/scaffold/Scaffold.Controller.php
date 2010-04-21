@@ -3,13 +3,6 @@
 add_required_class( 'Scaffold.Class.php', SCAFFOLD );
 add_required_class( 'Scaffolding.Class.php', SCAFFOLD );
 
-define(ACTION_ADD, "add");
-define(ACTION_LIST, "list");
-define(ACTION_DELETE, "delete");
-define(ACTION_UPDATE, "update");
-define(ACTION_FIND, "find");
-define(DEFAULT_TABLE, "Default");
-
 class ScaffoldController{
 	private static $instance;
 	private $application;
@@ -59,27 +52,58 @@ class ScaffoldController{
 		}
 		if(isset($template)){
 			$this->scaffolding = new Scaffolding($this->scaffoldObject, $template);
+			$this->scaffolding->bind();
 		} else {
 			$this->scaffolding = new Scaffolding($this->scaffoldObject, null);
 			// this is to create default scaffolds ...
-			switch($action){
-				case ACTION_ADD:
-					break;
-				case ACTION_DELETE:
-					break;
-				case ACTION_UPDATE:
-					break;
-				case ACTION_FIND:
-					break;
-				case ACTION_ADDLIST:
-				default:
-					break;
-			}
+			$this->scaffolding->buildDefaultForm($action);
 		}
-		$this->scaffolding->bind();
 		$data = $this->scaffolding->saveHTML();
 		$data = str_replace("[ACTION]", $action, $data);
 		return $data;
+	}
+	
+	public function doSubmission($action, $table, $id, $parameters){
+		if(!isset($table)){
+			throw new Exception("Table not set");
+		}
+		if(!isset($action)){
+			throw new Exception("Action not set");
+		}
+		// we only care about id if the action is not to add the record...
+		if(!isset($id) && $action != ACTION_ADD){
+			throw new Exception("Id not set");
+		}
+		if(!isset($parameters)){
+			throw new Exception("Parameters not set");
+		}
+		$this->scaffoldObject = $this->factory->buildScaffoldObject($table);
+		if(isset($id)){
+			$this->scaffoldObject->find($id);
+		}
+		$keys = array_keys($this->scaffoldObject->values);
+		foreach($keys as $key){
+			$this->scaffoldObject->$key = $parameters[$key];
+		}
+		print_r($this->scaffoldObject->values);
+		// this is to create default scaffolds ...
+		switch($action){
+			case ACTION_ADD:
+				$this->scaffoldObject->add();
+				break;
+			case ACTION_DELETE:
+				$this->scaffoldObject->delete();
+				break;
+			case ACTION_UPDATE:
+				$this->scaffoldObject->update();
+				break;
+			case ACTION_FIND:
+				//$this->scaffoldObject->find();
+				break;
+			case ACTION_ADDLIST:
+			default:
+				break;
+		}
 	}
 	
 	public function doAdd($scaffold, $action, $table){

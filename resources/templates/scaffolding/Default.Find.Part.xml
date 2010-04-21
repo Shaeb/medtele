@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form action="[SCAFFOLD_PROCESSOR]">
+	<input type="hidden" name="id" value="[userId_VALUE]"/>
+	<input type="hidden" name="submitted" value="true"/>
+	<p>
+		<label for="[username]_field">Username:</label><input type="text" name="[username]_field" id="[username]_field" value="[username_VALUE]"/>
+	</p>
+	<p>
+		<label for="[password]_field">password:</label><input type="password" name="[password]_field" id="[password]_field" value="[password_VALUE]"/>
+	</p>
+	<input type="submit" value="Submit"/>
+</form>
