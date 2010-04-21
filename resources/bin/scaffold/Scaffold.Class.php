@@ -17,6 +17,9 @@ class Scaffold{
 	}
 	
 	public function getTableData(){
+		if(0 < count($this->tables)){
+			return true;
+		}
 		$this->connection->connect();
 		$query = "show tables";
 		if(!$this->connection->query($query)){
@@ -116,6 +119,16 @@ class ScaffoldObject{
 				$this->values = array();
 			}
 			$this->primaryKey = $this->data["references"]["primary_key"];
+			$count = count($this->data["references"]["foreign_keys"]);
+			if(array_key_exists("foreign_keys",$this->data["references"]) && 0 < $count){
+				$foreignTables = &$this->data["references"]["foreign_keys"];
+				foreach($foreignTables as &$table){
+					$factory = ScaffoldFactory::getInstance($this->connection);
+					$foreignTable = $factory->buildScaffoldObject($table["referenced_table"]);
+					$foreignKey = $table["foreign_key"];
+					$table["object"] = $foreignTable;
+				}
+			}
 		}
 	}
 	
@@ -256,6 +269,13 @@ class ScaffoldObject{
 				$this->values[$key] = $result[$key];
 			} 
 			$objects[] = clone $this;
+		}
+		$foreignTables = &$this->data["references"]["foreign_keys"];
+		foreach($foreignTables as &$table){
+			if(array_key_exists("object", $table)){
+				$foreignKey = $table["foreign_key"];
+				$table["object"]->find($this->$foreignKey);
+			}
 		}
 		return $objects;
 	}
