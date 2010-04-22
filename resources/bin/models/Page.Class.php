@@ -53,7 +53,7 @@ class Page extends Document {
 				if( $this->urlExists( $this->url ) ) {
 					$this->log( "<!-- loading page $this->url -->" );
 					$this->isLoaded = $this->load( $this->url );
-					$this->tags = array( TEMPLATE_TAG, MODULES_TAG, DEPENDENCY_TAG, TITLE_TAG, SCAFFOLDING_TAG );
+					$this->tags = array( TEMPLATE_TAG, MODULES_TAG, DEPENDENCY_TAG, TITLE_TAG, MESSAGING_TAG );
 					$this->moduleList = array();
 				} else {
 					$this->log( "url not found: $this->url." );
@@ -77,7 +77,7 @@ class Page extends Document {
 				case TEMPLATE_TAG:
 					$this->processTemplate( $nodes );
 					break;
-				case SCAFFOLDING_TAG:
+				case MESSAGING_TAG:
 					//$this->processScaffolding($nodes);
 					break;
 			}
@@ -237,6 +237,31 @@ class Page extends Document {
 		}
 		return $duplicate;
 	}
+	
+	public function buildMessages(){
+		$messageTags = $this->template->getElementsByTagName(MESSAGING_TAG);
+		if(0 != $messageTags->length){
+			$messageTag = $messageTags->item(0);
+			$messages = $this->application->getMessages();
+			$div = $this->template->createElement("div");
+			$messageKeys = array_keys($messages);
+			foreach($messageKeys as $key){
+				if(0 < count($messages[$key])){
+					$h2 = $this->template->createElement("h2",$key);
+					$div->appendChild($h2);
+					$ul = $this->template->createElement("ul");
+					$ul->setAttribute("class","message_{$key}");
+					$messageGroups = $messages[$key];
+					foreach($messageGroups as $message){
+						$li = $this->template->createElement("li", $message);
+						$ul->appendChild($li);
+					}
+					$div->appendChild($ul);
+				}
+			}
+			$messageTag->parentNode->replaceChild($div,$messageTag);
+		}
+	}
 
 	public function output() {
 		$output = '';
@@ -255,7 +280,12 @@ class Page extends Document {
 			$bind[ $key ] = $tempOutput;
 			//$this->log( "<!-- $key: \n\n $tempOutput -->\n\n" );
 		}
-
+		// get any messages
+		
+		$this->application->addMessage("this is a test", ERROR_MESSAGES);
+//		$this->application->addMessage("this is a test", WARNING_MESSAGES);
+		$this->application->addMessage("this is a test",INFORMATIONAL_MESSAGES);
+		$this->buildMessages();
 		$this->template->bind( $bind );
 
 		$output = $this->template->saveHTML();

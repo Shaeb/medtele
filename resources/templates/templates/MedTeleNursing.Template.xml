@@ -42,6 +42,7 @@
 <replace id="leftModule">
 </replace>
 <div class="paddedContent">
+	<message id="dynamic_messaging_module"></message>
 	<replace id="mainModule">
 	</replace>
 </div>

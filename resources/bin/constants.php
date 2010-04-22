@@ -29,6 +29,7 @@ define("BIN_SCAFFOLD_ROOT", BIN_ROOT . "scaffold/" );
 define( PAGE_TAG, "page" );
 define( TITLE_TAG, "title" );
 define( MODULE_TAG, "module" );
+define( MESSAGING_TAG, "message" );
 define( MODULE_NAME_ATTRIBUTE, "name" );
 define( MODULES_TAG, "modules" );
 define( MODULES_REPLACE_ATTRIBUTE, "replace" );
