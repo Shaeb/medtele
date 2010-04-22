@@ -15,9 +15,9 @@ class Page extends Document {
 	public  $isLoaded;
 
 	function __construct( $pageName ) {
+		$this->application = ApplicationController::getInstance();
 		if(isset($_REQUEST["scaffolding"]) && "true" == $_REQUEST["scaffolding"]){	
 			add_required_class( 'Scaffold.Controller.php', SCAFFOLD );
-			$this->application = ApplicationController::getInstance();
 			$this->application->loadScaffoldingSettings("");
 			$settings = $this->application->getSettings();
 			$actions = array(ACTION_LIST,ACTION_DELETE,ACTION_UPDATE,ACTION_FIND,ACTION_ADD);
