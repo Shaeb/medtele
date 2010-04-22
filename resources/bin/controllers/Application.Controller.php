@@ -4,6 +4,9 @@ add_required_class( 'User.Class.php', MODEL );
 add_required_class( 'Document.Class.php', MODEL );
 // tools already a part of the app
 //require_once( 'resources/bin/helpers/tools.php' );
+define(ERROR_MESSAGES, "errors");
+define(WARNING_MESSAGES, "warnings");
+define(INFORMATIONAL_MESSAGES, "messages");
 
 class ApplicationController {
 	public $isLoggedIn;
@@ -13,6 +16,7 @@ class ApplicationController {
 	private $appSettings;
 	public $registrationPage;
 	private static  $instance;
+	private $messages;
 	
 	private function __construct(){
 		$this->connection = DatabaseConnection::getInstance();
@@ -20,6 +24,7 @@ class ApplicationController {
 		$this->session->start();
 		$this->appSettings = new ApplicationSettings(APPLICATION_SETTINGS_FILE, ENVIRONMENT);
 		$username = '';
+		$this->messages = array( ERROR_MESSAGES => array(), WARNING_MESSAGES => array(), INFORMATIONAL_MESSAGES => array() );
 		if( isset($_SESSION['username'])){
 			$username = $_SESSION['username'];
 		}
@@ -80,6 +85,41 @@ class ApplicationController {
 			}
 		} 
 	}
+	
+	public function getApplicationParameter($target){
+		// will return from query string, session, and later web services
+		return (array_key_exists($target, $_SESSION)) ? $_SESSION[$target] : 
+			(array_key_exists($target, $_REQUEST)) ? $_REQUEST[$target] : null;
+	}
+	
+	public function getSettingsFor($target, $block = ENVIRONMENT){
+		return $this->appSettings->getSettingsFor($target, $block);
+	}
+	public function loadScaffoldingSettings($block){
+		$this->appSettings->loadScaffoldingSettings($block);
+		return $this->appSettings->getSettings();
+	}
+	public function getSettings(){
+		return $this->appSettings->getSettings();
+	}
+	
+	public function setMessage( $message, $type = INFORMATIONAL_MESSAGES ) {
+		if(isset($message)){
+			$this->messages[$type] = $message;
+			//$_SESSION[ 'flash' ] = $message;
+		}
+	}
+	
+	public function addMessage( $message, $type = INFORMATIONAL_MESSAGES ) {
+		if(isset($message)){
+			$this->messages[$type][] = $message;
+			//$_SESSION[ 'flash' ] .= $message;
+		}
+	}
+	
+	public function getMessages(){
+		return $this->messages;
+	}
 }
 
 
@@ -99,12 +139,21 @@ class SessionController {
 		return self::$instance;
 	}
 	
+	/*****
 	public function setMessage( $message ) {
 		if(isset($message)){
 			$this->message = $message;
+			$_SESSION[ 'flash' ] = $message;
+		}
+	}
+	public function addMessage( $message ) {
+		if(isset($message)){
+			$this->message .= $message;
+			$_SESSION[ 'flash' ] .= $message;
 		}
 	}
 	
+	******/
 	public function start(){
 		if(!$this->sessionHasBegun){
 			$this->sessionHasBegun = true;
@@ -134,6 +183,10 @@ class SessionController {
 		}
 		return $isAuthenticated;
 	}
+	
+	public function getSessionVariable($target){
+		return $_SESSION[$target];
+	}
 }
 
 class ApplicationSettings extends Document {
@@ -149,7 +202,7 @@ class ApplicationSettings extends Document {
 	public function __construct($appSettingsFileName, $environment) {
 		$this->reload($appSettingsFileName, $environment);
 	}
-	
+		
 	public function reload($appSettingsFileName, $environment){
 		if( isset( $appSettingsFileName ) && isset($environment) ) {
 			$this->appSettingsFileName = $appSettingsFileName;
@@ -200,23 +253,36 @@ class ApplicationSettings extends Document {
 	public function getSettings(){
 		return $this->settings;
 	}
-	public function getSettingsFor($target){
-		if(array_key_exists($target,$this->settings[ENVIRONMENT])){
-			return $this->settings[ENVIRONMENT][$target];
-		} else {
-			return null;
-		}
+	public function getSettingsFor($target, $block = ENVIRONMENT){
+		return (array_key_exists($target,$this->settings[$block])) ? $this->settings[$block][$target] : null;
 	}
 	
-	/**
-	public static function getInstance($appSettingsFileName, $environment) {
-		if( !isset( self::$instance ) ) {
-			self::$instance = new ApplicationSettings();
-			self::$instance->reload($appSettingsFileName, $environment);
+	// block in this case refers to the templates table attribute
+	public function loadScaffoldingSettings($block){
+		// <global> ....
+		$globalBlock = $this->getElementsByTagName(GLOBAL_ENVIRONMENT);
+		$global = $globalBlock->item(0);
+		foreach($global->childNodes as $blocks){
+			// <scaffolding> ...		
+			if($blocks->nodeName == SCAFFOLDING_TAG){
+				// <templates> ...
+				foreach($blocks->childNodes as $templates){
+					if($templates->hasAttribute(SCAFFOLDING_TEMPLATES_TABLE_ATTRIBUTE)){
+						$table = $templates->getAttribute(SCAFFOLDING_TEMPLATES_TABLE_ATTRIBUTE);
+						foreach($templates->childNodes as $action){
+									$this->settings[GLOBAL_ENVIRONMENT][SCAFFOLDING_TAG][$table][$action->nodeName] = $action->nodeValue;
+						}
+					} else {
+						if(PAGE_TAG == $templates->nodeName) {
+							if($templates->hasAttribute("default") && "true" == $templates->getAttribute("default")){
+								$this->settings[GLOBAL_ENVIRONMENT][SCAFFOLDING_TAG]["default_page"] = $templates->nodeValue;
+							}
+						}
+					}
+				}
+			}
 		}
-		return self::$instance;
 	}
-	**/
 }
 
 class DatabaseConnection{
