@@ -15,12 +15,12 @@
 		<logging>false</logging>
 	</security>
 	<modules replace="mainModule">
-		<module>FlashModule</module>
 		<scaffolding dynamic="true">
 		    <action>add</action>
 		    <template>Users.Add.Part.xml</template>
 		    <object>Users</object>
 		</scaffolding>		
+		<module>FlashModule</module>
 	</modules>
 	<modules replace="leftModule">
 		<module>LoginModule</module>

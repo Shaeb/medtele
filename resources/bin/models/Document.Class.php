@@ -1,4 +1,7 @@
 <?
+define( XML_FORMAT, "XML");
+define( HTML_FORMAT, "HTML");
+define( JSON_FORMAT, "JSON");
 
 abstract class Document extends DOMDocument {
 
@@ -73,6 +76,10 @@ abstract class Document extends DOMDocument {
 			exit();
 		}
 		return success;
+	}
+	
+	public function getOutput($format = XML_FORMAT){
+		return (XML_FORMAT == $format) ? $this->saveXML() : (HTML_FORMAT == $format) ? $this->saveHTML() : $this->saveHTML();
 	}
 }
 

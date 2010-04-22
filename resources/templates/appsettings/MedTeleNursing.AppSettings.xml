@@ -35,6 +35,7 @@
 	</production>
 	<global>
 		<scaffolding>
+			<page default="true">ScaffoldingPage</page>
 			<templates table="Default">
 			<!-- 
 				<list>Default.List.Part.xml</list>

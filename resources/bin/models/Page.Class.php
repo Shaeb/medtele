@@ -10,16 +10,50 @@ class Page extends Document {
 	private $tags;
 	private $moduleList;
 	private $title;
+	private $application;
+	private $scaffolding;
 	public  $isLoaded;
 
 	function __construct( $pageName ) {
+		if(isset($_REQUEST["scaffolding"]) && "true" == $_REQUEST["scaffolding"]){	
+			add_required_class( 'Scaffold.Controller.php', SCAFFOLD );
+			$this->application = ApplicationController::getInstance();
+			$this->application->loadScaffoldingSettings("");
+			$settings = $this->application->getSettings();
+			$actions = array(ACTION_LIST,ACTION_DELETE,ACTION_UPDATE,ACTION_FIND,ACTION_ADD);
+			$action = "";
+			/***
+			 * we are going to change page=AddUsersPage to
+			 * action = add
+			 * table = Users
+			 * page = DefaultScaffoldingPage
+			 * 
+			 * this is because we want to pull out the information from the query string to make it simple, give it a dynamic url
+			 * and we are only using one scaffolding page in ApplicationSettings->global->scaffolding->default_page, to skin the page
+			 */
+			foreach($actions as $actionType){
+				$ucActionType = ucfirst($actionType);
+				$regexAction = "/^{$ucActionType}/";
+				if(1 == preg_match($regexAction, $pageName)){
+					$action = $actionType;
+					break;
+				}
+			}
+			$table = preg_replace($regexAction, "", $pageName);
+			$table = preg_replace("/Page$/", "", $table);
+			$_REQUEST["action"] = $action;
+			$_REQUEST["table"] = $table;
+			$pageName = $settings["global"]["scaffolding"]["default_page"];
+			$_REQUEST["page"] = $pageName;
+			$this->scaffolding = ScaffoldController::getInstance($this->application);
+		}
 		if( $pageName ) {
 				$this->pageName = $pageName;
 				$this->url = PAGE_PATH . $this->pageName . PAGE_EXTENSION;
 				if( $this->urlExists( $this->url ) ) {
 					$this->log( "<!-- loading page $this->url -->" );
 					$this->isLoaded = $this->load( $this->url );
-					$this->tags = array( TEMPLATE_TAG, MODULES_TAG, DEPENDENCY_TAG, TITLE_TAG );
+					$this->tags = array( TEMPLATE_TAG, MODULES_TAG, DEPENDENCY_TAG, TITLE_TAG, SCAFFOLDING_TAG );
 					$this->moduleList = array();
 				} else {
 					$this->log( "url not found: $this->url." );
@@ -42,6 +76,9 @@ class Page extends Document {
 					break;
 				case TEMPLATE_TAG:
 					$this->processTemplate( $nodes );
+					break;
+				case SCAFFOLDING_TAG:
+					//$this->processScaffolding($nodes);
 					break;
 			}
 			if( $nodes->length ) {
@@ -86,17 +123,25 @@ class Page extends Document {
 					// now, we only care about processing <module>
 					if( MODULE_TAG == $module->nodeName ) {
 						if($module->hasAttribute(AUTHENTICATED_ATTRIBUTE_NAME)){
-							global $application;							
-							if('true' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && true == $application->session->isSessionAuthenticated()) {
+							if('true' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && true == $this->application->session->isSessionAuthenticated()) {
 								array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );								
 							} else {
 								// for modules that should show up only if there is no session
-								if('false' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && false == $application->session->isSessionAuthenticated()) {
+								if('false' == $module->getAttribute(AUTHENTICATED_ATTRIBUTE_NAME) && false == $this->application->session->isSessionAuthenticated()) {
 									array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );
 								}
 							}
 						} else {
 							array_push( $this->moduleList[ $attributeValue ], new Module( $module->nodeValue ) );
+						}
+					} else {
+						if( SCAFFOLDING_TAG == $module->nodeName ){
+							print_r($_REQUEST);
+							//foreach($module as $node){
+								if($module->hasAttribute("dynamic") && "true" == $module->getAttribute("dynamic")){
+									array_push( $this->moduleList[ $attributeValue ], $this->scaffolding );
+								}
+							//}
 						}
 					}
 				}
@@ -205,7 +250,7 @@ class Page extends Document {
 		foreach( $keys as $key ) {
 			$tempOutput = '';
 			foreach( $this->moduleList[ $key ] as $module ) {
-				$tempOutput .= $module->output();
+				$tempOutput .= $module->getOutput(XML_FORMAT,$_REQUEST);
 			}
 			$bind[ $key ] = $tempOutput;
 			//$this->log( "<!-- $key: \n\n $tempOutput -->\n\n" );
