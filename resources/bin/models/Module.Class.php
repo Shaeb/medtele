@@ -47,7 +47,7 @@ class Module extends Document {
 
 		// process the child nodes
 		$this->processTags( $parent->childNodes );
-		$this->output();
+		$this->getOutput();
 	}
 
 	private function processTags( DOMNodeList $nodes ) {
@@ -95,13 +95,16 @@ class Module extends Document {
 				case DATA_TYPE_STATICFILE_VALUE:
 					if ( file_exists( MODULE_FILE_PATH . $node->nodeValue ) ) {
 						$this->staticFileOutput .= file_get_contents( MODULE_FILE_PATH . $node->nodeValue );
+					} else {
+						
+						//echo "loading: " . MODULE_FILE_PATH . $node->nodeValue;
 					}
 					break;
 			}
 		}
 	}
 
-	public function output() {
+	public function getOutput($format = XML_FORMAT) {
 		$output = "<div id='{$this->definedName}' name='{$this->definedName}'>\n";
 		$output .= $this->dynamicFileOutput . "\n";
 		$output .= $this->staticFileOutput . "\n";
